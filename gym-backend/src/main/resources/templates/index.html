@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Gym Management System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">Gym Management</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/?userId=1">View as Alice</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/?userId=2">View as Bob</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/?userId=3">View as Charlie</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto" th:if="${currentUser}">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{'/bookings?userId=' + ${currentUser.id}}">My Bookings</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div th:if="${currentUser}" class="alert alert-info">
+            Welcome, <strong th:text="${currentUser.username}">User</strong>!
+        </div>
+
+        <!-- Recommendations -->
+        <div th:if="${recommendations != null and !recommendations.isEmpty()}" class="mb-5">
+            <h3>Recommended for You</h3>
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                <div class="col" th:each="gym : ${recommendations}">
+                    <div class="card h-100 border-success shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title text-success" th:text="${gym.name}">Gym Name</h5>
+                            <p class="card-text" th:text="${gym.location}">Location</p>
+                            <p class="card-text">Price: $<span th:text="${gym.price}">0</span></p>
+                            <span class="badge bg-success">Recommended</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- All Gyms -->
+        <h3>All Available Gyms</h3>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col" th:each="gym : ${gyms}">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${gym.name}">Gym Name</h5>
+                        <p class="card-text" th:text="${gym.location}">Location</p>
+                        <p class="card-text">Price: $<span th:text="${gym.price}">0</span></p>
+                        <a th:href="@{'/gym/' + ${gym.id}}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

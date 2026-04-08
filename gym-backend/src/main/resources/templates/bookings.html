@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Bookings - Gym Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">Gym Management</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{'/?userId=' + ${currentUser.id}}">Home</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h3 class="mb-0">My Bookings</h3>
+            </div>
+            <div class="card-body">
+                <div th:if="${bookings.isEmpty()}" class="alert alert-warning">
+                    You have no bookings yet.
+                </div>
+                <div th:if="${!bookings.isEmpty()}" class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Gym Name</th>
+                                <th>Location</th>
+                                <th>Booking Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="booking : ${bookings}">
+                                <td th:text="${booking.gym.name}">Gym Name</td>
+                                <td th:text="${booking.gym.location}">Location</td>
+                                <td th:text="${#temporals.format(booking.bookingTime, 'yyyy-MM-dd HH:mm')}">Time</td>
+                                <td>
+                                    <span th:classappend="${booking.status == 'PENDING' ? 'badge bg-info' : 'badge bg-success'}" 
+                                          th:text="${booking.status}">Status</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
